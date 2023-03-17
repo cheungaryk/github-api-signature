@@ -19,14 +19,11 @@ export async function createSignature(
         armoredKey: privateKey
     });
     
-    if (passphrase) {
-        const decryptedKey = await decryptKey({
-            privateKey: decodedKey,
-            passphrase
-        });
-        if (!decryptedKey.isDecrypted()) {
-            throw new Error('Failed to decrypt private key using given passphrase');
-        }
+    const decryptedKey = passphrase 
+    ? await openpgp_1.decryptKey({ privateKey: decodedKey, passphrase }) 
+    : decodedKey;
+    if (!decryptedKey.isDecrypted()) {
+        throw new Error('Failed to decrypt private key using given passphrase');
     }
 
     // Convert commit object to a string if needed
