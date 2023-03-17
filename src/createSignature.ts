@@ -18,13 +18,15 @@ export async function createSignature(
     const decodedKey = await readPrivateKey({
         armoredKey: privateKey
     });
-
-    const decryptedKey = await decryptKey({
-        privateKey: decodedKey,
-        passphrase
-    });
-    if (!decryptedKey.isDecrypted()) {
-        throw new Error('Failed to decrypt private key using given passphrase');
+    
+    if (passphrase) {
+        const decryptedKey = await decryptKey({
+            privateKey: decodedKey,
+            passphrase
+        });
+        if (!decryptedKey.isDecrypted()) {
+            throw new Error('Failed to decrypt private key using given passphrase');
+        }
     }
 
     // Convert commit object to a string if needed
