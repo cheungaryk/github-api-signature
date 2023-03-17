@@ -20,8 +20,10 @@ export async function createSignature(
     });
     
     const decryptedKey = passphrase 
-    ? await openpgp_1.decryptKey({ privateKey: decodedKey, passphrase }) 
-    : decodedKey;
+    ? await decryptKey({
+        privateKey: decodedKey,
+        passphrase
+    }) : decodedKey;
     if (!decryptedKey.isDecrypted()) {
         throw new Error('Failed to decrypt private key using given passphrase');
     }
